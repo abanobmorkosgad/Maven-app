@@ -4,27 +4,31 @@ pipeline{
         maven "Maven-3.9"
     }
     stages{
-        stage("build jar"){
+        stage("test"){
             steps {
                 script{
-                    echo "building the app..."
-                    sh "mvn package"
+                    echo "testing..."
+                    echo "executing pipe for $BRANCH_NAME"
                 }
             }
         }
         stage("build image"){
+            when{
+                expression{
+                    BRANCH_NAME=='main'
+                }
+            }
             steps {
                 script{
-                    echo "building docker image..."
-                    withCredentials([usernamePassword(credentialsId: "Docker-cred", passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                        sh "docker build -t abanobmorkos10/app:2.0 ."
-                        sh "echo $PASS | docker login -u $USER --password-stdin"
-                        sh "docker push abanobmorkos10/app:2.0"
-                    }
+                    echo "building..."
                 }
             }
         }
         stage("deploy"){
+            when{
+                expression{
+                    BRANCH_NAME=='main'
+                }
             steps{
                 script{
                     echo "deploying "
