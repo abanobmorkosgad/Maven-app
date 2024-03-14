@@ -1,40 +1,40 @@
-pipeline{
+pipeline {
     agent any
-    tools{
+    tools {
         maven "Maven-3.9"
     }
-    stages{
-        stage("test"){
+    stages {
+        stage("test") {
             steps {
-                script{
+                script {
                     echo "testing..."
                     echo "executing pipe for $BRANCH_NAME"
                 }
             }
         }
-        stage("build image"){
-            when{
-                expression{
-                    BRANCH_NAME=='main'
+        stage("build image") {
+            when {
+                expression {
+                    BRANCH_NAME == 'main'
                 }
             }
             steps {
-                script{
+                script {
                     echo "building..."
                 }
             }
         }
-        stage("deploy"){
-            when{
-                expression{
-                    BRANCH_NAME=='main'
+        stage("deploy") {
+            when {
+                expression {
+                    BRANCH_NAME == 'main'
                 }
-            steps{
-                script{
-                    echo "deploying "
-                  }
             }
-         }
-      }
+            steps {
+                script {
+                    echo "deploying "
+                }
+            }
+        }
     }
 }
